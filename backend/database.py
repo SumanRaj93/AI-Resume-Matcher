@@ -9,11 +9,16 @@ def get_connection():
         password=os.getenv("DB_PASSWORD", ""),
         database=os.getenv("DB_NAME", "resume_matcher"),
         port=int(os.getenv("DB_PORT", "3306")),
+        ssl_ca=os.path.join(os.path.dirname(__file__), "ca.pem"),
+        ssl_verify_cert=True,
+        ssl_verify_identity=False,
+        use_pure=True
     )
 
 
 def ensure_schema():
     """Create the results table if needed and add session_id for privacy."""
+
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -35,17 +40,23 @@ def ensure_schema():
     """)
 
     # Supports an existing table from the original local project.
-    cursor.execute("SHOW COLUMNS FROM match_results LIKE 'session_id'")
+    cursor.execute(
+        "SHOW COLUMNS FROM match_results LIKE 'session_id'"
+    )
+
     if cursor.fetchone() is None:
         cursor.execute(
             "ALTER TABLE match_results "
             "ADD COLUMN session_id VARCHAR(64) NULL"
         )
+
         cursor.execute(
-            "UPDATE match_results SET session_id = 'legacy-local-data' "
+            "UPDATE match_results "
+            "SET session_id = 'legacy-local-data' "
             "WHERE session_id IS NULL"
         )
 
     connection.commit()
+
     cursor.close()
     connection.close()

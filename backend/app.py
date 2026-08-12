@@ -288,5 +288,9 @@ def history():
 
 
 if __name__ == "__main__":
-    # Debug should be disabled in production.
-    app.run(host="127.0.0.1", port=int(os.getenv("PORT", "5000")), debug=True)
+    app.run(
+        host="127.0.0.1",
+        port=int(os.getenv("PORT", "5000")),
+        debug=False,
+        use_reloader=False
+    )
