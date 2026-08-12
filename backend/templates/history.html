@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Match History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>📊 Match History</h1>
+
+        <p>
+            Previous resume-job analyses
+        </p>
+
+    </div>
+
+
+    {% if results %}
+
+        {% for result in results %}
+
+        <div class="card">
+
+            <h2>
+                {{ result.job_title }}
+            </h2>
+
+            <p>
+                Resume:
+                <strong>
+                    {{ result.resume_name }}
+                </strong>
+            </p>
+
+            <hr>
+
+
+            <div class="score-grid">
+
+                <div class="score-box">
+
+                    <h3>ATS</h3>
+
+                    <p>
+                        {{ result.ats_score }}%
+                    </p>
+
+                </div>
+
+
+                <div class="score-box">
+
+                    <h3>Skills</h3>
+
+                    <p>
+                        {{ result.skill_score }}%
+                    </p>
+
+                </div>
+
+
+                <div class="score-box">
+
+                    <h3>Semantic AI</h3>
+
+                    <p>
+                        {{ result.semantic_score }}%
+                    </p>
+
+                </div>
+
+
+                <div class="score-box">
+
+                    <h3>Final Match</h3>
+
+                    <p>
+                        {{ result.final_score }}%
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="recommendation">
+
+                {% if result.recommendation == "Strong Match" %}
+
+                    🟢
+
+                {% elif result.recommendation == "Moderate Match" %}
+
+                    🟡
+
+                {% else %}
+
+                    🔴
+
+                {% endif %}
+
+                <strong>
+                    {{ result.recommendation }}
+                </strong>
+
+            </div>
+
+
+            <p>
+                Analyzed:
+                {{ result.created_at }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="card">
+
+            <h2>No analysis history yet.</h2>
+
+            <p>
+                Analyze a resume to create your first record.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="header">
+
+        <a href="/" class="button">
+            Analyze Another Resume
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

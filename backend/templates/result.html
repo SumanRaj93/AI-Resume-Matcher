@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analysis Result | AI Resume Matcher</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="page-shell narrow">
+  <header class="topbar">
+    <div><div class="brand">AI Resume ↔ Job Matcher</div><div class="muted">AI-powered resume compatibility analysis</div></div>
+    <a href="/dashboard" class="button button-light">Dashboard</a>
+  </header>
+  <main>
+    <section class="hero-row result-hero"><div><span class="eyebrow">ANALYSIS COMPLETE</span><h1>Your Match Result</h1><p class="muted">See how closely your resume fits the job description.</p></div></section>
+
+    <section class="result-score-grid">
+      <div class="card score-hero"><span class="eyebrow">FINAL MATCH SCORE</span><div class="big-score">{{ final_score }}<small>%</small></div><div class="progress"><span style="width: {{ final_score }}%"></span></div><div class="match-status">{{ recommendation_icon }} <strong>{{ recommendation }}</strong></div><p class="muted">Overall resume-job compatibility</p></div>
+      <div class="card score-hero secondary-score"><span class="eyebrow">ATS RESUME SCORE</span><div class="big-score">{{ ats_score }}<small>%</small></div><p class="muted">Overall resume structure score</p></div>
+    </section>
+
+    <section class="card"><div class="section-heading"><div><h2>Score Breakdown</h2><p class="muted">How the final score was calculated</p></div></div><div class="score-grid four">
+      <div class="metric"><span>Skill Match</span><strong>{{ skill_score }}%</strong><div class="mini-progress"><span style="width: {{ skill_score }}%"></span></div></div>
+      <div class="metric"><span>Semantic AI</span><strong>{{ semantic_score }}%</strong><div class="mini-progress"><span style="width: {{ semantic_score }}%"></span></div></div>
+      <div class="metric"><span>Experience</span><strong>{{ experience_score }}%</strong><div class="mini-progress"><span style="width: {{ experience_score }}%"></span></div></div>
+      <div class="metric"><span>Education</span><strong>{{ education_score }}%</strong><div class="mini-progress"><span style="width: {{ education_score }}%"></span></div></div>
+    </div></section>
+
+    <section class="card"><div class="section-heading"><div><h2>Skill Analysis</h2><p class="muted">Skills found in the resume compared with the job description</p></div></div><div class="skills-grid">
+      <div class="skill-panel matched-panel"><h3>✓ Matched Skills <span>{{ matched_skills|length }}</span></h3><ul class="skill-list">{% if matched_skills %}{% for skill in matched_skills %}<li class="matched">✓ {{ skill }}</li>{% endfor %}{% else %}<li>No matching skills found.</li>{% endif %}</ul></div>
+      <div class="skill-panel missing-panel"><h3>✗ Missing Skills <span>{{ missing_skills|length }}</span></h3><ul class="skill-list">{% if missing_skills %}{% for skill in missing_skills %}<li class="missing">✗ {{ skill }}</li>{% endfor %}{% else %}<li>No missing skills 🎉</li>{% endif %}</ul></div>
+    </div></section>
+
+    <section class="card"><h2>💡 Smart Recommendations</h2><p class="muted">Suggestions based on the skills missing from your resume.</p>{% if recommendations %}{% for advice in recommendations %}<div class="recommendation">📚 {{ advice }}</div>{% endfor %}{% else %}<div class="recommendation">🎉 Your resume already covers the detected job skills well.</div>{% endif %}</section>
+
+    <div class="footer-actions"><a href="/" class="button button-primary">Analyze Another Resume</a><a href="/dashboard" class="button button-light">View Dashboard</a><a href="/history" class="button button-light">Match History</a></div>
+  </main>
+</div>
+</body>
+</html>

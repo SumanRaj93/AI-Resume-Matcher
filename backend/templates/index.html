@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Matcher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>AI Resume ↔ Job Matcher</h1>
+        <p>Upload a resume and compare it with any job description.</p>
+    </div>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <div class="card">
+        <form action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data">
+            <h2>1. Upload Resume</h2>
+            <p class="hint">PDF or DOCX, maximum 10 MB.</p>
+            <input type="file" name="resume" accept=".pdf,.docx" required>
+
+            <h2>2. Job Description</h2>
+            <textarea
+                name="job_description"
+                rows="16"
+                placeholder="Paste the complete job description here..."
+                required></textarea>
+
+            <button class="button" type="submit">Analyze Resume</button>
+        </form>
+    </div>
+
+    <div class="header">
+        <a href="{{ url_for('dashboard') }}" class="button">📊 My Dashboard</a>
+        <a href="{{ url_for('history') }}" class="button">📋 My History</a>
+    </div>
+</div>
+</body>
+</html>

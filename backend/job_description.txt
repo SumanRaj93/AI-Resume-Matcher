@@ -1,0 +1,17 @@
+Data Analyst
+
+We are looking for a Data Analyst to analyze business data and create
+interactive dashboards.
+
+Requirements:
+
+Python
+SQL
+Excel
+Power BI
+Pandas
+NumPy
+Data Visualization
+Machine Learning
+Tableau
+Communication

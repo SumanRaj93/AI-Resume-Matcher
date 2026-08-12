@@ -1,0 +1,8 @@
+Flask
+gunicorn
+pymupdf
+python-docx
+mysql-connector-python
+sentence-transformers
+scikit-learn
+Werkzeug

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | AI Resume Matcher</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="page-shell">
+  <header class="topbar">
+    <div>
+      <div class="brand">AI Resume ↔ Job Matcher</div>
+      <div class="muted">Personal compatibility dashboard</div>
+    </div>
+    <nav class="nav-actions">
+      <a href="/" class="button button-primary">+ New Analysis</a>
+      <a href="/history" class="button button-light">Match History</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-row">
+      <div>
+        <span class="eyebrow">YOUR ANALYTICS</span>
+        <h1>Resume Match Dashboard</h1>
+        <p class="muted">Compare your resume against different roles and see where you match best.</p>
+      </div>
+      {% if best_match %}
+      <div class="best-pill"><span>🏆</span> Best match <strong>{{ best_score }}%</strong></div>
+      {% endif %}
+    </section>
+
+    <section class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-icon">📄</div><div><span>Total Analyses</span><strong>{{ total_analyses }}</strong></div></div>
+      <div class="kpi-card"><div class="kpi-icon">📈</div><div><span>Average Match</span><strong>{{ average_score }}%</strong></div></div>
+      <div class="kpi-card"><div class="kpi-icon">🏆</div><div><span>Best Match</span><strong>{{ best_score }}%</strong></div></div>
+      <div class="kpi-card"><div class="kpi-icon">⭐</div><div><span>Strong Matches</span><strong>{{ strong_matches }}</strong></div></div>
+    </section>
+
+    <section class="card chart-card">
+      <div class="section-heading">
+        <div><h2>Match Score by Job</h2><p class="muted">Final resume-job compatibility score</p></div>
+        <span class="legend-dot">● Match Score</span>
+      </div>
+      {% if chart_scores %}
+      <div class="chart-wrap"><canvas id="matchChart"></canvas></div>
+      {% else %}
+      <div class="empty-state"><div>📊</div><h3>No analyses yet</h3><p>Run your first resume analysis to see your scores here.</p><a href="/" class="button button-primary">Analyze Resume</a></div>
+      {% endif %}
+    </section>
+
+    {% if best_match %}
+    <section class="card best-card">
+      <div class="best-card-icon">🏆</div>
+      <div class="best-card-main">
+        <span class="eyebrow">BEST MATCH</span>
+        <h2>{{ best_match.job_title }}</h2>
+        <p class="muted">Resume: {{ best_match.resume_name }}</p>
+        <span class="status-badge">{{ best_match.recommendation }}</span>
+      </div>
+      <div class="best-score">{{ best_score }}<small>%</small></div>
+    </section>
+    {% endif %}
+
+    <section class="card">
+      <div class="section-heading"><div><h2>Recent Analyses</h2><p class="muted">Your latest resume-job comparisons</p></div><a href="/history" class="text-link">View all →</a></div>
+      {% if results %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Job</th><th>Resume</th><th>Match</th><th>Recommendation</th></tr></thead>
+          <tbody>
+          {% for result in results[:10] %}
+          <tr>
+            <td><strong>{{ result.job_title }}</strong></td>
+            <td class="muted">{{ result.resume_name }}</td>
+            <td><span class="score-badge">{{ result.final_score }}%</span></td>
+            <td><span class="mini-status">{{ result.recommendation }}</span></td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state compact"><p>No analyses available yet.</p></div>
+      {% endif %}
+    </section>
+  </main>
+</div>
+
+{% if chart_scores %}
+<div id="chartData" data-labels='{{ chart_labels | tojson }}' data-scores='{{ chart_scores | tojson }}' hidden></div>
+<script>
+const data = document.getElementById('chartData');
+const labels = JSON.parse(data.dataset.labels);
+const scores = JSON.parse(data.dataset.scores);
+new Chart(document.getElementById('matchChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{ label: 'Match Score (%)', data: scores, borderRadius: 8, maxBarThickness: 54 }] },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } } },
+    scales: {
+      y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#e8edf3' } },
+      x: { grid: { display: false }, ticks: { maxRotation: 0, minRotation: 0 } }
+    }
+  }
+});
+</script>
+{% endif %}
+</body>
+</html>
