@@ -1,72 +1,62 @@
 # AI Resume ↔ Job Matcher
 
-A Flask application that compares a resume with a job description using:
-- ATS structure scoring
-- skill matching
-- SentenceTransformer semantic similarity
-- experience matching
-- education matching
-- recommendations
+AI-powered Resume ↔ Job Matching System built using Python, Flask, Scikit-learn, MySQL, Aiven, and Render.
 
-## Important privacy behavior
+This application compares a candidate's resume with a job description and generates an overall compatibility score based on ATS structure, skills, semantic similarity, experience, and education.
 
-The public-ready version:
-- gives each browser a unique anonymous session ID
-- shows dashboard/history only for that session
-- gives uploaded files unique temporary names
-- deletes uploaded resumes after text extraction
-- does not store the resume PDF/DOCX in MySQL
+## 🚀 Live Demo
 
-This is an anonymous session-based demo, not a full account system. For a production SaaS, add user authentication and stronger session/security controls.
+**Live Application:**  
+https://ai-resume-matcher-vkev.onrender.com
 
-## Setup
+**GitHub Repository:**  
+https://github.com/SumanRaj93/AI-Resume-Matcher
 
-Create a virtual environment and install:
+---
 
-```bash
-pip install -r requirements.txt
-```
+## 📌 Features
 
-Set these environment variables before starting:
+- Resume upload in PDF and DOCX format
+- ATS resume structure scoring
+- Skill extraction and matching
+- Semantic similarity using TF-IDF and Cosine Similarity
+- Experience matching
+- Education matching
+- Missing skill identification
+- Personalized recommendations
+- Overall resume-job compatibility score
+- Analytics dashboard
+- Match history
+- Anonymous session-based history
+- Temporary resume file processing
+- Cloud MySQL database using Aiven
+- Production deployment using Render
 
-```text
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=resume_matcher
-FLASK_SECRET_KEY=replace-with-a-long-random-secret
-```
+---
 
-Create the MySQL database:
+## 🧠 How It Works
 
-```sql
-CREATE DATABASE resume_matcher;
-```
-
-The application creates the `match_results` table automatically.
-
-Run:
-
-```bash
-cd backend
-python app.py
-```
-
-Open:
+The application analyzes a resume through multiple stages:
 
 ```text
-http://127.0.0.1:5000
-```
-
-## Deployment
-
-Use a production WSGI server such as Gunicorn:
-
-```bash
-gunicorn --chdir backend app:app
-```
-
-Configure an external MySQL database and environment variables on your hosting platform.
-
-Do not commit `.env`, passwords, resumes, or `venv/` to GitHub.
+Resume
+   ↓
+PDF/DOCX Text Extraction
+   ↓
+ATS Analysis
+   ↓
+Skill Extraction
+   ↓
+Skill Matching
+   ↓
+Semantic Similarity
+   ↓
+Experience Matching
+   ↓
+Education Matching
+   ↓
+Final Compatibility Score
+   ↓
+Recommendations
+   ↓
+Dashboard & Match History
